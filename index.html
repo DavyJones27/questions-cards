@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="./font-awesome-4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title">Flashcards</h1>
+      <button class="btn">Add Question</button>
+      <div class="card">
+        <form class="question-form">
+          <div class="feedback">
+            <h1>feedback</h1>
+          </div>
+          <div class="Question-area">
+            <label for="question" class="question-label">Question </label>
+            <textarea id="question" rows="3"></textarea>
+          </div>
+          <div class="Answer-area">
+            <label for="answer" class="answer-label">Answer</label>
+            <textarea id="answer" rows="3"></textarea>
+          </div>
+          <button type="submit" class="save">Save</button>
+        </form>
+        <div class="header">
+            <a href="#"><i class="fa fa-window-close"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="container2">
+      <div class="card2">
+        <h2 class="title">Question title</h2>
+        <a class="hide"  href="#">Show/Hide Answer</a>
+        <h3 class="ansHide">Answer</h3>
+        <div class="btn1">
+          <button class="edit" data-id="0">Edit</button>
+          <button class="delete">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
