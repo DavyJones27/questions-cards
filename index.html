@@ -5,41 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
-    <link
-      rel="stylesheet"
-      href="./font-awesome-4.7.0/css/font-awesome.min.css"
-    />
     <link rel="stylesheet" href="./main.css" />
   </head>
   <body>
+    <button class="btn add">Add Question</button>
     <div class="container">
-      <h1 class="title">Flashcards</h1>
-      <button class="btn">Add Question</button>
       <div class="card">
-        <form class="question-form">
+        <form class="question-form" id="form">
           <div class="feedback">
             <h1>feedback</h1>
           </div>
           <div class="Question-area">
             <label for="question" class="question-label">Question </label>
-            <textarea id="question" rows="3"></textarea>
+            <textarea id="question" name="question" rows="3"></textarea>
+          </div>
+          <div class="option-area">
+            <label for="option-1" class="question-label">option 1 </label>
+            <textarea
+              id="option-1"
+              class="options"
+              name="option1"
+              rows="1"
+            ></textarea>
+            <label for="option-2" class="question-label">option 2 </label>
+            <textarea
+              id="option-2"
+              class="options"
+              name="option2"
+              rows="1"
+            ></textarea>
+            <label for="option-3" class="question-label">option 3 </label>
+            <textarea
+              id="option-3"
+              class="options"
+              name="option3"
+              rows="1"
+            ></textarea>
+            <label for="option-4" class="question-label">option 4 </label>
+            <textarea
+              id="option-4"
+              class="options"
+              name="option4"
+              rows="1"
+            ></textarea>
           </div>
           <div class="Answer-area">
             <label for="answer" class="answer-label">Answer</label>
-            <textarea id="answer" rows="3"></textarea>
+            <textarea id="answer" name="answer" rows="3"></textarea>
           </div>
           <button type="submit" class="save">Save</button>
+          <input type="hidden" class="_id" value="0" />
         </form>
         <div class="header">
-            <a href="#"><i class="fa fa-window-close"></i></a>
+          <a href="#" style="text-decoration:none"
+            ><i class="fa fa-window-close">X</i></a
+          >
         </div>
       </div>
     </div>
+    <div class="container2_heading">
+      <h1>All the Question</h1>
+    </div>
     <div class="container2">
       <div class="card2">
-        <h2 class="title">Question title</h2>
-        <a class="hide"  href="#">Show/Hide Answer</a>
-        <h3 class="ansHide">Answer</h3>
+        <h1>Question</h1>
+        <h4 class="title editData">Question title</h4>
+        <div class="display-option">
+          <div>
+            <h4>option 1</h4>
+            <p class="editData">
+              publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum.
+            </p>
+          </div>
+          <div>
+            <h4>option 2</h4>
+            <p class="editData">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+            </p>
+          </div>
+          <div>
+            <h4>option 3</h4>
+            <p class="editData">
+              type and scrambled it to make a type specimen book. It has
+            </p>
+          </div>
+          <div>
+            <h4>option 4</h4>
+            <p class="editData">
+              survived not only five centuries, but also the leap into
+            </p>
+          </div>
+        </div>
+        <h1>Answer</h1>
+        <h4 class="title editData" target="form">Answer</h4>
         <div class="btn1">
           <button class="edit" data-id="0">Edit</button>
           <button class="delete">Delete</button>

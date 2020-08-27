@@ -1,14 +1,14 @@
+const showbtn = document.querySelector(".btn");
+const questioncard = document.querySelector(".card");
+const closeBtn = document.querySelector(".header");
+const form = document.querySelector(".question-form");
+const feedback = document.querySelector(".feedback");
+const questionInput = document.querySelector("#question");
+const answerInput = document.querySelector("#answer");
+const optionsInput = document.querySelectorAll(".options");
+const questionList = document.querySelector(".container2");
+let questionId = document.querySelector("._id");
 function eventxListener() {
-  const showbtn = document.querySelector(".btn");
-  const questioncard = document.querySelector(".card");
-  const closeBtn = document.querySelector(".header");
-  const form = document.querySelector(".question-form");
-  const feedback = document.querySelector(".feedback");
-  const questionInput = document.querySelector("#question");
-  const answerInput = document.querySelector("#answer");
-  const questionList = document.querySelector(".container2");
-  let data = [];
-  let id = 1;
   const ui = new UI();
   showbtn.addEventListener("click", function() {
     ui.showQuestion(questioncard);
@@ -16,48 +16,70 @@ function eventxListener() {
   closeBtn.addEventListener("click", function() {
     ui.hideQuestion(questioncard);
   });
-  form.addEventListener("submit", function(e) {
+  form.addEventListener("submit", e => {
     e.preventDefault();
-    const question = questionInput.value.trim();
-    const answer = answerInput.value.trim();
-    if (question === "" || answer === "") {
-      feedback.classList.add("showItem");
-      feedback.textContent = "Cannot Add Empty Values";
-      setTimeout(() => {
-        feedback.classList.remove("showItem");
-      }, 4000);
-    } else {
-      const questions = new Question(id, question, answer);
-      data.push(questions);
-      id++;
-      ui.addQuestion(questionList, questions);
-      ui.clearFeild(questionInput, answerInput);
-    }
+    dataCollection();
   });
-  questionList.addEventListener("click", function(event) {
+
+  const dataCollection = async () => {
+    const formData = {};
+    let name, value;
+    let check = true;
+    for (let i = 0; i < form.elements.length - 2; i++) {
+      name = form.elements[i].name;
+      value = form.elements[i].value.trim();
+      if (value === "") {
+        feedback.classList.add("showItem");
+        feedback.textContent = `Cannot Add Empty ${name} Values`;
+        check = false;
+        setTimeout(() => {
+          feedback.classList.remove("showItem");
+        }, 4000);
+        break;
+      }
+      formData[name] = value;
+    }
+    let id = questionId.innerHTML.trim();
+    let questions;
+    if (check) {
+      if (id == 0) {
+        id = await fetchData("url", formData, "POST");
+      }
+      questions = new Question(
+        id,
+        formData.question,
+        formData.answer,
+        formData.option1,
+        formData.option2,
+        formData.option3,
+        formData.option4
+      );
+      ui.addQuestion(questionList, questions);
+      ui.formFeild(form, "");
+    }
+    check = true;
+  };
+  questionList.addEventListener("click", async function(event) {
     event.preventDefault();
     if (event.target.classList.contains("delete")) {
-      questionList.removeChild(event.target.parentElement.parentElement);
       let id = event.target.dataset.id;
-      const tempdata = data.filter(function(item) {
-        return item.id !== parseInt(id);
-      });
-      data = tempdata;
-    } else if (event.target.classList.contains("hide")) {
-      event.target.nextElementSibling.classList.toggle("showItem");
+      const res = await deleteData(url, id);
+      if (res == success) {
+        questionList.removeChild(event.target.parentElement.parentElement);
+      }
     } else if (event.target.classList.contains("edit")) {
-      let id = event.target.dataset.id;
-      questionList.removeChild(event.target.parentElement.parentElement);
       ui.showQuestion(questioncard);
-      const tempQuestion = data.filter(function(item) {
-        return item.id === parseInt(id);
-      });
-      const tempdata = data.filter(function(item) {
-        return item.id !== parseInt(id);
-      });
-      data = tempdata;
-        questionInput.value = tempQuestion[0].title;
-        answerInput.value = tempQuestion[0].answer;
+      let id = event.target.dataset.id;
+      const editData = event.target.parentElement.parentElement.querySelectorAll(
+        ".editData"
+      );
+      questionInput.value = editData[0].innerHTML.trim();
+      for (let i = 0; i < optionsInput.length; i++) {
+        optionsInput[i].value = editData[i + 1].innerHTML.trim();
+      }
+      questionId.value = id;
+      answerInput.value = editData[5].innerHTML.trim();
+      questionList.removeChild(event.target.parentElement.parentElement);
     }
   });
 }
@@ -68,28 +90,121 @@ UI.prototype.showQuestion = function(e) {
 UI.prototype.hideQuestion = function(e) {
   e.classList.remove("show");
 };
-UI.prototype.clearFeild = function(question, answer) {
-  question.value = "";
-  answer.value = "";
+UI.prototype.formFeild = function(inputs, value) {
+  for (let i = 0; i < inputs.elements.length - 1; i++) {
+    inputs.elements[i].value = value;
+  }
 };
 UI.prototype.addQuestion = function(element, question) {
   const div = document.createElement("div");
   div.classList.add("card2");
-  div.innerHTML = `<h2 class="title">${question.title}</h2>
-        <a class="hide"  href="#">Show/Hide Answer</a>
-        <h3 class="ansHide">${question.answer}</h3>
+  div.innerHTML = `<h1>Question</h1>
+        <h4 class="title editData">${question.title}</h4>
+        <div class="display-option">
+          <div>
+            <h4>option 1</h4>
+            <p class="editData">
+                ${question.option1}
+            </p>
+          </div>
+          <div>
+            <h4>option 2</h4>
+            <p class="editData">
+                ${question.option2}
+            </p>
+          </div>
+          <div>
+            <h4>option 3</h4>
+            <p class="editData">
+                ${question.option3}
+            </p>
+          </div>
+          <div>
+            <h4>option 4</h4>
+            <p class="editData">
+              ${question.option4}
+            </p>
+          </div>
+        </div>
+        <h1>Answer</h1>
+        <h4 class="title editData">${question.answer}</h4>
         <div class="btn1">
-          <button data-id="${question.id}" class="edit">Edit</button>
-          <button data-id="${question.id}" class="delete">Delete</button>
+          <button class="edit" data-id=]${question.id}>Edit</button>
+          <button class="delete" data-id=]${question.id}>Delete</button>
         </div>`;
   element.appendChild(div);
 };
-function Question(id, title, answer) {
+function Question(id, title, answer, option1, option2, option3, option4) {
   this.id = id;
   this.title = title;
   this.answer = answer;
+  this.option1 = option1;
+  this.option2 = option2;
+  this.option3 = option3;
+  this.option4 = option4;
 }
-
 document.addEventListener("DOMContentLoaded", function() {
   eventxListener();
 });
+
+const fetchData = (url, data, method) => {
+  fetch(url, {
+    method: method,
+    body: JSON.stringify(data),
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error("Failed");
+      }
+      return res.json();
+    })
+    .then(json => json)
+    .catch(err => {
+      feedback.classList.add("showItem");
+      feedback.textContent = err;
+      check = false;
+      setTimeout(() => {
+        feedback.classList.remove("showItem");
+      }, 4000);
+    });
+};
+
+const deleteData = (url, id) => {
+  fetch(url, {
+    method: "DELETE",
+    body: JSON.stringify(id),
+    headers: {
+      "Content-type": "application/json"
+    }
+  })
+    .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+        throw new Error("Failed to delete");
+      }
+      return res.json();
+    })
+    .then(json => json)
+    .catch(err => {
+      feedback.classList.add("showItem");
+      feedback.textContent = err;
+      check = false;
+      setTimeout(() => {
+        feedback.classList.remove("showItem");
+      }, 4000);
+    });
+};
+
+let data;
+const fetchData = url => {
+  fetch(url)
+    .then(response => response.json())
+    .then(json => {
+      data = json;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
