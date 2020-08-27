@@ -197,14 +197,14 @@ const deleteData = (url, id) => {
     });
 };
 
-let data;
-const fetchData = url => {
-  fetch(url)
-    .then(response => response.json())
-    .then(json => {
-      data = json;
-    })
-    .catch(err => {
-      console.log(err);
-    });
-};
+// let data;
+// const fetchData = url => {
+//   fetch(url)
+//     .then(response => response.json())
+//     .then(json => {
+//       data = json;
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// };
