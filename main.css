@@ -22,7 +22,7 @@ body {
   background: whitesmoke;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  /* justify-content: space-evenly; */
 }
 .container2_heading {
   text-align: center;
@@ -117,10 +117,12 @@ body {
 .card2 {
   margin: 2rem 0 1rem 0;
   border: 2px solid rgb(233, 118, 51);
-  width: 35%;
+  width: 30%;
   /* max-width: 100%; */
   padding: 1rem;
   align-self: center;
+  margin: 1rem;
+
 }
 .title {
   margin: 1rem 0 1rem 0;

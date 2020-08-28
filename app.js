@@ -39,32 +39,45 @@ function eventxListener() {
       }
       formData[name] = value;
     }
-    let id = questionId.innerHTML.trim();
+    let id = questionId.value;
     let questions;
     if (check) {
       if (id == 0) {
-        id = await fetchData("url", formData, "POST");
+         id = await fetchData("http://127.0.0.1:3000/admin/questions", formData, "POST")
+         console.log(66);
       }
-      questions = new Question(
-        id,
-        formData.question,
-        formData.answer,
-        formData.option1,
-        formData.option2,
-        formData.option3,
-        formData.option4
-      );
-      ui.addQuestion(questionList, questions);
-      ui.formFeild(form, "");
+      else
+      {
+        formData._id = id;
+        // console.log(id);
+        id = await fetchData("http://127.0.0.1:3000/admin/questions", formData, "PUT")
+      }
+      if(id)
+      {
+        questions = new Question(
+          id,
+          formData.question,
+          formData.answer,
+          formData.option1,
+          formData.option2,
+          formData.option3,
+          formData.option4
+        );
+        ui.addQuestion(questionList, questions);
+        ui.formFeild(form, "");
+      }
     }
     check = true;
+    questionId.value = 0;
   };
   questionList.addEventListener("click", async function(event) {
     event.preventDefault();
     if (event.target.classList.contains("delete")) {
-      let id = event.target.dataset.id;
-      const res = await deleteData(url, id);
-      if (res == success) {
+      let _id = event.target.dataset.id;
+      // console.log(_id);
+      const {id} = await deleteData("http://127.0.0.1:3000/admin/questions", _id);
+      console.log(id);
+      if (id == _id) {
         questionList.removeChild(event.target.parentElement.parentElement);
       }
     } else if (event.target.classList.contains("edit")) {
@@ -129,8 +142,8 @@ UI.prototype.addQuestion = function(element, question) {
         <h1>Answer</h1>
         <h4 class="title editData">${question.answer}</h4>
         <div class="btn1">
-          <button class="edit" data-id=]${question.id}>Edit</button>
-          <button class="delete" data-id=]${question.id}>Delete</button>
+          <button class="edit" data-id=${question.id}>Edit</button>
+          <button class="delete" data-id=${question.id}>Delete</button>
         </div>`;
   element.appendChild(div);
 };
@@ -143,68 +156,98 @@ function Question(id, title, answer, option1, option2, option3, option4) {
   this.option3 = option3;
   this.option4 = option4;
 }
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
+  const data = await fetchAllData("http://127.0.0.1:3000/admin/questions");
   eventxListener();
+ displayQuestionCard(data)
+
+  console.log(data);
 });
 
-const fetchData = (url, data, method) => {
-  fetch(url, {
-    method: method,
-    body: JSON.stringify(data),
-    headers: {
-      "Content-type": "application/json"
-    }
-  })
-    .then(res => {
+const fetchData = async (url, data, method) => {
+  let id;
+  try {
+    let res = await fetch(url, {
+      method: method,
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json"
+      }
+    });
+    console.log(res);
       if (res.status !== 200 && res.status !== 201) {
         throw new Error("Failed");
       }
-      return res.json();
-    })
-    .then(json => json)
-    .catch(err => {
-      feedback.classList.add("showItem");
+    res = await res.json();
+    
+
+    return res.id
+  }
+  catch (err) {
+    feedback.classList.add("showItem");
       feedback.textContent = err;
       check = false;
       setTimeout(() => {
         feedback.classList.remove("showItem");
-      }, 4000);
-    });
+      }, 10000);
+  }
 };
 
-const deleteData = (url, id) => {
-  fetch(url, {
+const deleteData = async (url, _id) => {
+  
+  try {
+    let res = await fetch(url, {
     method: "DELETE",
-    body: JSON.stringify(id),
+    body: JSON.stringify({_id}),
     headers: {
       "Content-type": "application/json"
     }
   })
-    .then(res => {
       if (res.status !== 200 && res.status !== 201) {
         throw new Error("Failed to delete");
       }
-      return res.json();
-    })
-    .then(json => json)
-    .catch(err => {
+      res = res.json();
+    return res;
+  }
+  catch(err) {
       feedback.classList.add("showItem");
       feedback.textContent = err;
       check = false;
       setTimeout(() => {
         feedback.classList.remove("showItem");
       }, 4000);
-    });
+    };
 };
 
-// let data;
-// const fetchData = url => {
-//   fetch(url)
-//     .then(response => response.json())
-//     .then(json => {
-//       data = json;
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// };
+const fetchAllData =async url => {
+  try{
+let response = await fetch(url)
+  response= await response.json()
+  return response    
+}
+catch(err)  {
+      console.log(err);
+    };
+};
+
+const displayQuestionCard = (data) =>{
+  const ui = new UI();
+  let questions;
+  for(let i=0;i<data.length;i++)
+{
+  questions = new Question(
+    data[i]._id,
+    data[i].question,
+    data[i].solution,
+    data[i].option1,
+    data[i].option2,
+    data[i].option3,
+    data[i].option4
+  );
+  ui.addQuestion(questionList, questions);
+
+}
+
+}
+
+
