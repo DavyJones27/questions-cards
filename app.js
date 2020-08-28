@@ -43,14 +43,14 @@ function eventxListener() {
     let questions;
     if (check) {
       if (id == 0) {
-         id = await fetchData("http://127.0.0.1:3000/admin/questions", formData, "POST")
+         id = await fetchData("http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions", formData, "POST")
          console.log(66);
       }
       else
       {
         formData._id = id;
         // console.log(id);
-        id = await fetchData("http://127.0.0.1:3000/admin/questions", formData, "PUT")
+        id = await fetchData("http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions", formData, "PUT")
       }
       if(id)
       {
@@ -75,7 +75,7 @@ function eventxListener() {
     if (event.target.classList.contains("delete")) {
       let _id = event.target.dataset.id;
       // console.log(_id);
-      const {id} = await deleteData("http://127.0.0.1:3000/admin/questions", _id);
+      const {id} = await deleteData("http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions", _id);
       console.log(id);
       if (id == _id) {
         questionList.removeChild(event.target.parentElement.parentElement);
@@ -157,7 +157,7 @@ function Question(id, title, answer, option1, option2, option3, option4) {
   this.option4 = option4;
 }
 document.addEventListener("DOMContentLoaded", async function() {
-  const data = await fetchAllData("http://127.0.0.1:3000/admin/questions");
+  const data = await fetchAllData("http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions");
   eventxListener();
  displayQuestionCard(data)
 
