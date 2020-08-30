@@ -26,9 +26,6 @@ let numOfOptions = 2;
 let questionnum = -1;
 function eventxListener() {
   const ui = new UI();
-  // showbtn[1].addEventListener("click", function() {
-  //   ui.showQuestion(modulecard);
-  // });
   showbtn[0].addEventListener("click", function() {
     ui.showQuestion(modulecard);
   });
@@ -43,7 +40,7 @@ function eventxListener() {
     numOfOptions--;
   });
 
-  formModule.addEventListener("submit", e => {
+  formModule.addEventListener("submit", async function(e) {
     e.preventDefault();
     const moduleDetails = {};
     let name, value;
@@ -52,18 +49,21 @@ function eventxListener() {
       name = formModule.elements[i].name;
       value = formModule.elements[i].value.trim();
       if (value === "") {
-        feedback.classList.add("showItem");
-        feedback.textContent = `Cannot Add Empty ${name} Values`;
-        check = false;
-        setTimeout(() => {
-          feedback.classList.remove("showItem");
-        }, 4000);
+        ui.Red(`Cannot Add Empty ${name} Values`);
       }
       moduleDetails[name] = value;
     }
     if (check) {
-      ui.addModule(moduleContainerCard, moduleDetails);
-      ui.formFeild(formModule, "");
+      const message = await sendData(
+        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+        moduleDetails,
+        "POST"
+      );
+      if (message == "sucessfull") {
+        ui.Green();
+        ui.addModule(moduleContainerCard, moduleDetails);
+        ui.formFeild(formModule, "");
+      }
     }
     check = true;
   });
@@ -80,12 +80,7 @@ function eventxListener() {
       name = form.elements[i].name;
       value = form.elements[i].value.trim();
       if (value === "") {
-        feedback.classList.add("showItem");
-        feedback.textContent = `Cannot Add Empty ${name} Values`;
-        check = false;
-        setTimeout(() => {
-          feedback.classList.remove("showItem");
-        }, 4000);
+        ui.Red(`Cannot Add Empty ${name} Values`);
         break;
       }
       if (!name.includes("option")) {
@@ -99,32 +94,21 @@ function eventxListener() {
     let id = questionId.value;
     let questions;
     if (check) {
-      // if (id == 0) {
-      //   console.log(55);
-      //   id = await sendData(
-      //     "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
-      //     formData,
-      //     "POST"
-      //   );
-      //   console.log(id);
-      // } else {
-      //   formData._id = id;
-      //   id = await sendData(
-      //     "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
-      //     formData,
-      //     "PUT"
-      //   );
-      //   console.log(id);
-      // }
+      if (id == 0) {
+        id = await sendData(
+          "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+          formData,
+          "POST"
+        );
+      } else {
+        formData._id = id;
+        id = await sendData(
+          "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+          formData,
+          "PUT"
+        );
+      }
       if (id) {
-        feedback.classList.add("showItem");
-        feedback.classList.add("color");
-        feedback.textContent = `Sucessfull Added`;
-        check = false;
-        setTimeout(() => {
-          feedback.classList.remove("showItem");
-          feedback.classList.remove("color");
-        }, 4000);
         questions = new Question(
           id,
           formData.question,
@@ -245,6 +229,24 @@ function eventxListener() {
   });
 }
 function UI() {}
+UI.prototype.Green = function(text) {
+  feedback.classList.add("showItem");
+  feedback.classList.add("color");
+  feedback.textContent = `${text}`;
+  check = false;
+  setTimeout(() => {
+    feedback.classList.remove("showItem");
+    feedback.classList.remove("color");
+  }, 4000);
+};
+UI.prototype.Red = function(text) {
+  feedback.classList.add("showItem");
+  feedback.textContent = `${text}`;
+  check = false;
+  setTimeout(() => {
+    feedback.classList.remove("showItem");
+  }, 4000);
+};
 UI.prototype.showQuestion = function(e) {
   e.classList.add("show");
 };
@@ -301,10 +303,7 @@ UI.prototype.displayNewOptions = function(options, element) {
     </div>`;
     div.innerHTML += optionHtml;
   }
-  // console.log(div);
-
   element.appendChild(div);
-  // console.log(element);
 };
 UI.prototype.addQuestion = function(element, question) {
   const div = document.createElement("div");
@@ -379,19 +378,14 @@ const sendData = async (url, data, method) => {
         "Content-type": "application/json"
       }
     });
-    // console.log(res);
     if (res.status !== 200 && res.status !== 201) {
       throw new Error("Failed");
     }
     res = await res.json();
     return res.id;
   } catch (err) {
-    feedback.classList.add("showItem");
-    feedback.textContent = err;
-    check = false;
-    setTimeout(() => {
-      feedback.classList.remove("showItem");
-    }, 10000);
+    const ui = new UI();
+    ui.Red(err);
   }
 };
 
@@ -410,12 +404,8 @@ const deleteData = async (url, _id) => {
     res = res.json();
     return res;
   } catch (err) {
-    feedback.classList.add("showItem");
-    feedback.textContent = err;
-    check = false;
-    setTimeout(() => {
-      feedback.classList.remove("showItem");
-    }, 4000);
+    const ui = new UI();
+    ui.Red(err);
   }
 };
 
@@ -425,7 +415,8 @@ const fetchAllData = async url => {
     response = await response.json();
     return response;
   } catch (err) {
-    // console.log(err);
+    const ui = new UI();
+    ui.Red(err);
   }
 };
 

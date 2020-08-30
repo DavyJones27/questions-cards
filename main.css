@@ -178,8 +178,12 @@ body {
 .btn1,
 .module-button {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   margin-top: 1rem;
+}
+.module-button button{
+  margin-top: 1rem;  
 }
 .delete,
 .edit,
