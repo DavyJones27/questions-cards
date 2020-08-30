@@ -5,11 +5,17 @@
 }
 body {
   display: grid;
-  grid-template-columns: 97%;
-  justify-content: flex-end;
+  grid-template-columns: 100%;
+  justify-content: center;
   background: whitesmoke;
 }
-.container {
+.headerbtn {
+  display: flex;
+  justify-content: space-around;
+}
+
+.container,
+.moduleContainer {
   margin-top: 2rem;
   width: 100%;
   background: whitesmoke;
@@ -22,7 +28,15 @@ body {
   background: whitesmoke;
   display: flex;
   flex-wrap: wrap;
-  /* justify-content: space-evenly; */
+  justify-content: space-evenly;
+}
+.module-container-Card {
+  margin-top: 2rem;
+  width: 100%;
+  background: whitesmoke;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 .container2_heading {
   text-align: center;
@@ -31,21 +45,43 @@ body {
 .title {
   font-size: 2.5rem;
 }
+.questionForm-btn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 1rem 0 0 0;
+}
 .btn,
-.save {
+.save,
+.submit,
+.add-option,
+.remove-option {
   background: transparent;
   padding: 0.75rem 1rem 0.75rem 1rem;
   outline: none;
   border: 2px solid rgb(233, 118, 51);
   color: rgb(233, 118, 51);
-  margin: 1rem auto 2rem 0;
   font-weight: bold;
 }
-.btn:hover {
+.remove-option {
+  border: 2px solid red;
+  color: red;
+}
+.remove-option:hover {
+  background: red;
+  color: white;
+}
+.btn {
+  margin: 1rem 2rem;
+}
+
+.btn:hover,
+.add-option:hover {
   background: rgb(233, 118, 51);
   color: white;
 }
-.card {
+.card,
+.card0 {
   width: 60%;
   grid-auto-flow: column;
   grid-template-columns: 90% 10%;
@@ -53,13 +89,16 @@ body {
   padding: 2rem;
   display: none;
 }
-.save {
-  width: 50%;
+.save,
+.submit {
+  margin: 1rem 0 2rem 0;
+  width: 30%;
   margin-bottom: 0;
   border: 2px solid green;
   color: green;
 }
-.save:hover {
+.save:hover,
+.submit:hover {
   background: green;
   color: white;
 }
@@ -67,7 +106,7 @@ body {
   color: white;
   font-size: 1rem;
   border: 2px solid rgb(233, 118, 51);
-  padding:0.5rem;
+  padding: 0.5rem;
   text-decoration: none;
   background-color: red;
 }
@@ -75,54 +114,57 @@ body {
   align-self: flex-start;
 }
 .feedback {
+  position: fixed;
   text-align: center;
   margin: 0 auto 1rem auto;
   background: rgb(238, 143, 143);
-  width: 60%;
+  width: 100%;
   border-radius: 3px;
+  text-transform: capitalize;
   display: none;
   padding: 1rem;
+  z-index: 999;
 }
 .Question-area,
-.Answer-area {
+.Answer-area,
+.Module-area,
+.Mosulename-area {
   display: grid;
   margin: 1rem auto 1rem auto;
 }
 #answer,
 #question,
-#option-1,
-#option-2,
-#option-3,
-#option-4 {
+#option-num,
+#Module,
+#description,
+#Mosulename,
+#speed,#input {
   margin-top: 1rem;
   width: 105%;
-  height: 6rem;
+  height: 3rem;
   border: 2px solid rgb(233, 118, 51);
   font-size: 1.4rem;
   padding-left: 0.5rem;
   padding-top: 0.25rem;
 }
-#option-1,
-#option-2,
-#option-3,
-#option-4 {
-  height: 3rem;
-}
+
 .question-label,
 .answer-label,
-.option-label {
+.option-label,
+.Module-description-label,
+.Module-label,
+.Mosulename-label {
   font-size: 1.2rem;
   font-weight: bold;
 }
-.card2 {
+.card2,
+.moduleCard {
   margin: 2rem 0 1rem 0;
   border: 2px solid rgb(233, 118, 51);
   width: 30%;
-  /* max-width: 100%; */
   padding: 1rem;
   align-self: center;
   margin: 1rem;
-
 }
 .title {
   margin: 1rem 0 1rem 0;
@@ -133,13 +175,16 @@ body {
   text-decoration: none;
   color: rgb(10, 157, 248);
 }
-.btn1 {
+.btn1,
+.module-button {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
 }
 .delete,
-.edit {
+.edit,
+.module-Add-question,
+.delete-module,.showAll {
   padding: 0.6rem;
   background: transparent;
   outline: none;
@@ -148,15 +193,26 @@ body {
   color: green;
   font-weight: bold;
 }
-.delete {
+.showAll{
+  border: 2px solid rgb(37, 76, 204);
+  color: rgb(37, 76, 204);
+}
+.showAll:hover{
+  background: rgb(37, 76, 204);
+  color: white;
+}
+.delete,
+.delete-module {
   color: rgb(233, 118, 51);
   border: 2px solid rgb(233, 118, 51);
 }
-.edit:hover {
+.edit:hover,
+.module-Add-question:hover {
   color: white;
   background: green;
 }
-.delete:hover {
+.delete:hover,
+.delete-module:hover {
   background: rgb(233, 118, 51);
   color: white;
 }
@@ -180,19 +236,29 @@ body {
   border: 2px solid rgb(233, 118, 51);
   padding: 2px;
 }
+.color{
+  background:green;
+}
 @media screen and (max-width: 558px) {
-  .card {
+  .card,
+  .card0 {
     padding: 10px;
     width: 90%;
   }
-  .card2 {
+  .card2,
+  .moduleCard {
     padding: 10px;
     width: 90%;
   }
-  .container {
+  .container,
+  .moduleContainer {
     width: 100%;
   }
-  .container2 {
+  .container2,
+  .moduleContainerCard {
     width: 100%;
+  }
+  .headerbtn {
+    justify-content: center;
   }
 }

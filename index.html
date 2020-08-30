@@ -8,58 +8,119 @@
     <link rel="stylesheet" href="./main.css" />
   </head>
   <body>
-    <button class="btn add">Add Question</button>
+    <div class="headerbtn">
+      <div class="">
+        <!-- <button class="btn add">Add Question</button> -->
+        <button class="btn add">Add Module</button>
+      </div>
+      <div class="headnum">
+        <h1>Questions:</h1>
+      </div>
+    </div>
+    <div class="feedback">
+      <h1>feedback</h1>
+    </div>
+    <div class="moduleContainer">
+      <div class="card0">
+        <form action="" class="form-module">
+          <div class="Module-area">
+            <label for="Module" class="Module-label">Module Name</label>
+            <input type="text" name="ModuleName" id="Module" />
+          </div>
+          <div class="description">
+            <label for="description" class="Module-description-label"
+              >Course Name</label
+            >
+            <input type="text" name="CourseName" id="description" />
+          </div>
+          <button type="submit" class="submit">Submit</button>
+        </form>
+      </div>
+    </div>
     <div class="container">
       <div class="card">
         <form class="question-form" id="form">
-          <div class="feedback">
-            <h1>feedback</h1>
+          <div class="Mosulename-area">
+            <label for="question" class="Mosulename-label">Module Name</label> </label>
+            <textarea id="Mosulename" name="ModuleName" class="ModuleName" rows="3"></textarea>
+          </div>
+          <div class="Mosulename-area">
+            <label for="question" class="Mosulename-label">Course Name</label> </label>
+            <textarea id="Mosulename" name="CourseName" class="CourseName" rows="3"></textarea>
           </div>
           <div class="Question-area">
             <label for="question" class="question-label">Question </label>
             <textarea id="question" name="question" rows="3"></textarea>
           </div>
           <div class="option-area">
-            <label for="option-1" class="question-label">option 1 </label>
-            <textarea
-              id="option-1"
-              class="options"
-              name="option1"
-              rows="1"
-            ></textarea>
-            <label for="option-2" class="question-label">option 2 </label>
-            <textarea
-              id="option-2"
-              class="options"
-              name="option2"
-              rows="1"
-            ></textarea>
-            <label for="option-3" class="question-label">option 3 </label>
-            <textarea
-              id="option-3"
-              class="options"
-              name="option3"
-              rows="1"
-            ></textarea>
-            <label for="option-4" class="question-label">option 4 </label>
-            <textarea
-              id="option-4"
-              class="options"
-              name="option4"
-              rows="1"
-            ></textarea>
-          </div>
+            <div class="op-1">
+              <label for="option-1" class="question-label">option 1 </label>
+              <textarea
+                id="option-num"
+                class="options"
+                name="option1"
+                rows="1"
+                ></textarea>
+              </div>
+              <div class="op-2">
+              <label for="option-2" class="question-label">option 2 </label>
+              <textarea
+                id="option-num"
+                class="options"
+                name="option2"
+                rows="1"
+                ></textarea>
+              </div>
+            </div>
           <div class="Answer-area">
             <label for="answer" class="answer-label">Answer</label>
             <textarea id="answer" name="answer" rows="3"></textarea>
           </div>
+          <div class="text">
+            <label for="speed" class="answer-label">Text Color</label>
+            <Input id="input" class="TextColor" name="textColor"></Input>
+            </div>
+            <div class="">
+            <label for="speed" class="answer-label">Text Background Color</label>
+            <Input id="input" class="TextBackground"  name="textBackground"></Input>
+            </div>
+            <div class="">
+            <label for="speed" class="answer-label">Ball Color</label>
+            <Input id="input" class="BallColor" name="BallColor"></Input>
+            </div>
+            <div class="">
+            <label for="speed" class="answer-label">Number of Balls </label>
+            <Input id="input" class="NumberOfBalls" name="NumberOfBalls"></Input>
+          </div>
+          <div class="speed">
+            <label for="speed" class="answer-label">Choose the Speed</label>
+            <select name="speed"  id="speed">
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+          <div class="questionForm-btn">
+            <button class="add-option" >Add +1 option</button>
+            <button class="remove-option">remove option</button>            
           <button type="submit" class="save">Save</button>
+          </div>
           <input type="hidden" class="_id" value="0" />
         </form>
-        <div class="header">
-          <a href="#" style="text-decoration:none"
-            ><i class="fa fa-window-close">X</i></a
-          >
+     
+      </div>
+    </div>
+    <h1 style="text-align:center">All modules</h1>
+    <div class="module-container-Card">
+      <div class="moduleCard">
+        <h1 >Module Name</h1> 
+        <h4 class="title editDatamodule">module title</h4>
+        <h1>Course Name</h1>
+        <h4 class="title editDatamodule">module description</h4>
+        <div class="module-button">
+        <button class="module-Add-question">Add Question</button>
+        <button class="showAll">Show All</button>
+        <button class="delete-module">Delete Module</button>
         </div>
       </div>
     </div>
@@ -67,43 +128,46 @@
       <h1>All the Question</h1>
     </div>
     <div class="container2">
-      <!-- <div class="card2">
-        <h1>Question</h1>
-        <h4 class="title editData">Question title</h4>
-        <div class="display-option">
-          <div>
-            <h4>option 1</h4>
-            <p class="editData">
-              publishing software like Aldus PageMaker including versions of
-              Lorem Ipsum.
-            </p>
-          </div>
-          <div>
-            <h4>option 2</h4>
-            <p class="editData">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-            </p>
-          </div>
-          <div>
-            <h4>option 3</h4>
-            <p class="editData">
-              type and scrambled it to make a type specimen book. It has
-            </p>
-          </div>
-          <div>
-            <h4>option 4</h4>
-            <p class="editData">
-              survived not only five centuries, but also the leap into
-            </p>
-          </div>
+  <!-- <div class="card2">
+    <h2>Question</h2>
+    <h5 class="title editData">Question</h5>
+    <div class="optionHere">
+      <div class="display-option">
+        <div>
+          <h4>option 1</h4>
+          <p class="editData">
+            option 1
+          </p>
         </div>
-        <h1>Answer</h1>
-        <h4 class="title editData" target="form">Answer</h4>
-        <div class="btn1">
-          <button class="edit" data-id="5f491343cfb1f18254e1cf24" target="form">Edit</button>
-          <button class="delete" data-id="5f491343cfb1f18254e1cf24" target="form">Delete</button>
+        <div>
+          <h4>option 2</h4>
+          <p class="editData">
+            option 2
+          </p>
         </div>
-      </div> -->
+      </div>
+    </div>
+    <h1>Answer</h1>
+    <h4 class="title editData">Answer</h4>
+    <h2>Course Name</h2>
+    <h5 class="editData">Course</h5>
+    <h2>Module Name</h2>
+    <h5 class="editData">Module</h5>
+    <h2>Text Color</h2>
+    <h5 class="editData">Text Color</h5>
+    <h2>Text Background</h2>
+    <h5 class="editData">Text Background Color</h5>
+    <h2>BallColor</h2>
+    <h5 class="editData">Ball Color</h5>
+    <h2>Number Of Balls</h2>
+    <h5 class="editData">Number Of Balls</h5>
+    <h2>Speed</h2>
+    <h5 class="editData">Medium</h5>
+    <div class="btn1">
+      <button class="edit" data-id="0">Edit</button>
+      <button class="delete" data-id="0">Delete</button>
+    </div> -->
+  </div>
     </div>
 
     <script src="./app.js"></script>
