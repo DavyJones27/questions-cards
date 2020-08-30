@@ -55,11 +55,11 @@ function eventxListener() {
     }
     if (check) {
       const message = await sendData(
-        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+        "http://127.0.0.1:3000/admin/courses", //Create Module endpoint POST
         moduleDetails,
         "POST"
       );
-      if (message == "sucessfull") {
+      if (message.message == "successfull") {
         ui.Green();
         ui.addModule(moduleContainerCard, moduleDetails);
         ui.formFeild(formModule, "");
@@ -95,18 +95,21 @@ function eventxListener() {
     let questions;
     if (check) {
       if (id == 0) {
-        id = await sendData(
-          "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+        console.log(formData);
+        var result = await sendData(
+          "http://127.0.0.1:3000/admin/questions", //POST Add new question
           formData,
           "POST"
         );
+        id = result.id;
       } else {
         formData._id = id;
-        id = await sendData(
-          "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+        var result = await sendData(
+          "http://127.0.0.1:3000/admin/questions", //PUT Edit question
           formData,
           "PUT"
         );
+        id = result.id;
       }
       if (id) {
         questions = new Question(
@@ -146,11 +149,12 @@ function eventxListener() {
         module: editDatamodule[0].innerHTML.trim(),
         course: editDatamodule[1].innerHTML.trim()
       };
+      console.log(moduleCourse);
       const message = await deleteData(
-        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+        "http://127.0.0.1:3000/admin/courses", //Module Delelete 
         moduleCourse
       );
-      if (message == "sucessfull") {
+      if (message.message == "successfull") {
         moduleContainerCard.removeChild(
           event.target.parentElement.parentElement
         );
@@ -161,7 +165,7 @@ function eventxListener() {
         course: editDatamodule[1].innerHTML.trim()
       };
       AllQuestionofModule = await sendData(
-        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+        "http://127.0.0.1:3000/admin/get-questions",
         moduleCourse,
         "POST"
       );
@@ -172,7 +176,7 @@ function eventxListener() {
     if (event.target.classList.contains("delete")) {
       let _id = event.target.dataset.id;
       const { id } = await deleteData(
-        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
+        "http://127.0.0.1:3000/admin/questions",
         _id
       );
       if (id == _id) {
@@ -361,7 +365,7 @@ function Question(
 }
 document.addEventListener("DOMContentLoaded", async function() {
   // const data = await fetchAllData(
-  //   "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions"
+  //   "http://127.0.0.1:3000/admin/questions"
   // );
   eventxListener();
   // numOfQuestion.innerHTML = `<h1>Questions:${data.length}</h1>`;
@@ -382,7 +386,7 @@ const sendData = async (url, data, method) => {
       throw new Error("Failed");
     }
     res = await res.json();
-    return res.id;
+    return res;
   } catch (err) {
     const ui = new UI();
     ui.Red(err);
