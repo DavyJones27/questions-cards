@@ -55,7 +55,7 @@ function eventxListener() {
     }
     if (check) {
       const message = await sendData(
-        "http://127.0.0.1:3000/admin/courses", //Create Module endpoint POST
+        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/courses", //Create Module endpoint POST
         moduleDetails,
         "POST"
       );
@@ -97,7 +97,7 @@ function eventxListener() {
       if (id == 0) {
         console.log(formData);
         var result = await sendData(
-          "http://127.0.0.1:3000/admin/questions", //POST Add new question
+          "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions", //POST Add new question
           formData,
           "POST"
         );
@@ -105,7 +105,7 @@ function eventxListener() {
       } else {
         formData._id = id;
         var result = await sendData(
-          "http://127.0.0.1:3000/admin/questions", //PUT Edit question
+          "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions", //PUT Edit question
           formData,
           "PUT"
         );
@@ -151,7 +151,7 @@ function eventxListener() {
       };
       console.log(moduleCourse);
       const message = await deleteData(
-        "http://127.0.0.1:3000/admin/courses", //Module Delelete 
+        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/courses", //Module Delelete 
         moduleCourse
       );
       if (message.message == "successfull") {
@@ -165,7 +165,7 @@ function eventxListener() {
         course: editDatamodule[1].innerHTML.trim()
       };
       AllQuestionofModule = await sendData(
-        "http://127.0.0.1:3000/admin/get-questions",
+        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/get-questions",
         moduleCourse,
         "POST"
       );
@@ -176,7 +176,7 @@ function eventxListener() {
     if (event.target.classList.contains("delete")) {
       let _id = event.target.dataset.id;
       const { id } = await deleteData(
-        "http://127.0.0.1:3000/admin/questions",
+        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions",
         _id
       );
       if (id == _id) {
