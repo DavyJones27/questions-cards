@@ -3,7 +3,8 @@ const showbtn = document.querySelectorAll(".btn");
 const moduleContainerCard = document.querySelector(".module-container-Card");
 const questioncard = document.querySelector(".card");
 const modulecard = document.querySelector(".card0");
-const closeBtn = document.querySelector(".header");
+const closeBtnQform = document.querySelector(".header");
+const closeBtnMform = document.querySelector(".header1");
 const form = document.querySelector(".question-form");
 const feedback = document.querySelector(".feedback");
 const questionInput = document.querySelector("#question");
@@ -27,8 +28,11 @@ let numOfOptions = 2;
 let questionnum = -1;
 function eventxListener() {
   const ui = new UI();
-  closeBtn.addEventListener("click", function() {
+  closeBtnQform.addEventListener("click", function(e) {
     ui.hideQuestion(questioncard);
+  });
+  closeBtnMform.addEventListener("click", function(e) {
+    ui.hideQuestion(modulecard);
   });
   showbtn[0].addEventListener("click", function() {
     ui.showQuestion(modulecard);
@@ -292,7 +296,6 @@ UI.prototype.showQuestion = function(e) {
   e.classList.add("show");
 };
 UI.prototype.hideQuestion = function(e) {
-  this.formFeild(form, "");
   e.classList.remove("show");
 };
 UI.prototype.formFeild = function(inputs, value) {
