@@ -1,3 +1,4 @@
+const AllQuestionofModuleHead = document.querySelector(".container2_heading");
 const showbtn = document.querySelectorAll(".btn");
 const moduleContainerCard = document.querySelector(".module-container-Card");
 const questioncard = document.querySelector(".card");
@@ -26,6 +27,9 @@ let numOfOptions = 2;
 let questionnum = -1;
 function eventxListener() {
   const ui = new UI();
+  closeBtn.addEventListener("click", function() {
+    ui.hideQuestion(questioncard);
+  });
   showbtn[0].addEventListener("click", function() {
     ui.showQuestion(modulecard);
   });
@@ -60,9 +64,10 @@ function eventxListener() {
         "POST"
       );
       if (message.message == "successfull") {
-        ui.Green();
+        ui.Green("New Module has been created successfully");
         ui.addModule(moduleContainerCard, moduleDetails);
         ui.formFeild(formModule, "");
+        ui.hideQuestion(modulecard);
       }
     }
     check = true;
@@ -125,11 +130,15 @@ function eventxListener() {
           formData.NumberOfBalls,
           formData.speed
         );
+        ui.Green(
+          `New Question in the Module ${formData.ModuleName} of Course ${formData.CourseName} has been created successfully`
+        );
         ui.addQuestion(questionList, questions);
         questionnum++;
         const ele = document.querySelectorAll(".optionHere");
         ui.displayNewOptions(questions.options, ele[questionnum]);
         ui.formFeild(form, "");
+        ui.hideQuestion(questioncard);
       }
     }
     check = true;
@@ -149,9 +158,8 @@ function eventxListener() {
         module: editDatamodule[0].innerHTML.trim(),
         course: editDatamodule[1].innerHTML.trim()
       };
-      console.log(moduleCourse);
       const message = await deleteData(
-        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/courses", //Module Delelete 
+        "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/courses", //Module Delelete
         moduleCourse
       );
       if (message.message == "successfull") {
@@ -169,6 +177,10 @@ function eventxListener() {
         moduleCourse,
         "POST"
       );
+      AllQuestionofModuleHead.innerHTML = `<h1> All Question from ${moduleCourse.module} and ${moduleCourse.course} </h1>
+      <h1>Total questions (${AllQuestionofModule.length})</h1>`;
+      ui.Green("Data successfully fetched");
+      ui.addListOffetchData(AllQuestionofModule);
     }
   });
   questionList.addEventListener("click", async function(event) {
@@ -181,6 +193,7 @@ function eventxListener() {
       );
       if (id == _id) {
         questionnum--;
+        ui.Green("Question Deleted Successfully");
         questionList.removeChild(event.target.parentElement.parentElement);
       }
     } else if (event.target.classList.contains("edit")) {
@@ -251,10 +264,35 @@ UI.prototype.Red = function(text) {
     feedback.classList.remove("showItem");
   }, 4000);
 };
+UI.prototype.addListOffetchData = function(AllQuestionofModule) {
+  questionnum = -1;
+  questionList.innerHTML = "";
+  for (let i = 0; i < AllQuestionofModule.length; i++) {
+    const singleDetail = AllQuestionofModule[i];
+    const question = new Question(
+      singleDetail._id,
+      singleDetail.question,
+      singleDetail.solution,
+      singleDetail.options,
+      singleDetail.course,
+      singleDetail.module,
+      singleDetail.textColor,
+      singleDetail.textBackground,
+      singleDetail.ballColor,
+      singleDetail.numberOfBalls,
+      singleDetail.speed
+    );
+    this.addQuestion(questionList, question);
+    questionnum++;
+    const ele = document.querySelectorAll(".optionHere");
+    this.displayNewOptions(question.options, ele[questionnum]);
+  }
+};
 UI.prototype.showQuestion = function(e) {
   e.classList.add("show");
 };
 UI.prototype.hideQuestion = function(e) {
+  this.formFeild(form, "");
   e.classList.remove("show");
 };
 UI.prototype.formFeild = function(inputs, value) {
@@ -417,6 +455,7 @@ const fetchAllData = async url => {
   try {
     let response = await fetch(url);
     response = await response.json();
+    console.log(response);
     return response;
   } catch (err) {
     const ui = new UI();
