@@ -28,27 +28,27 @@ let numOfOptions = 2;
 let questionnum = -1;
 function eventxListener() {
   const ui = new UI();
-  closeBtnQform.addEventListener("click", function (e) {
+  closeBtnQform.addEventListener("click", function(e) {
     ui.hideQuestion(questioncard);
   });
-  closeBtnMform.addEventListener("click", function (e) {
+  closeBtnMform.addEventListener("click", function(e) {
     ui.hideQuestion(modulecard);
   });
-  showbtn[0].addEventListener("click", function () {
+  showbtn[0].addEventListener("click", function() {
     ui.showQuestion(modulecard);
   });
-  addOptions.addEventListener("click", function (e) {
+  addOptions.addEventListener("click", function(e) {
     e.preventDefault();
     numOfOptions++;
     ui.addOption(optionAreaQform, numOfOptions);
   });
-  removeOption.addEventListener("click", function (e) {
+  removeOption.addEventListener("click", function(e) {
     e.preventDefault();
     ui.deleteOption(numOfOptions);
     numOfOptions--;
   });
 
-  formModule.addEventListener("submit", async function (e) {
+  formModule.addEventListener("submit", async function(e) {
     e.preventDefault();
     const moduleDetails = {};
     let name, value;
@@ -77,7 +77,7 @@ function eventxListener() {
     }
     check = true;
   });
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", e => {
     e.preventDefault();
     dataCollection();
   });
@@ -147,7 +147,7 @@ function eventxListener() {
     check = true;
     questionId.value = 0;
   };
-  moduleContainerCard.addEventListener("click", async function (event) {
+  moduleContainerCard.addEventListener("click", async function(event) {
     event.preventDefault();
     const editDatamodule = event.target.parentElement.parentElement.querySelectorAll(
       ".editDatamodule"
@@ -159,7 +159,7 @@ function eventxListener() {
     } else if (event.target.classList.contains("delete-module")) {
       const moduleCourse = {
         module: editDatamodule[0].innerHTML.trim(),
-        course: editDatamodule[1].innerHTML.trim(),
+        course: editDatamodule[1].innerHTML.trim()
       };
       const message = await deleteModule(
         "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/courses", //Module Delelete
@@ -173,7 +173,7 @@ function eventxListener() {
     } else if (event.target.classList.contains("showAll")) {
       const moduleCourse = {
         module: editDatamodule[0].innerHTML.trim(),
-        course: editDatamodule[1].innerHTML.trim(),
+        course: editDatamodule[1].innerHTML.trim()
       };
       AllQuestionofModule = await sendData(
         "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/get-questions",
@@ -186,7 +186,7 @@ function eventxListener() {
       ui.addListOffetchData(AllQuestionofModule);
     }
   });
-  questionList.addEventListener("click", async function (event) {
+  questionList.addEventListener("click", async function(event) {
     event.preventDefault();
     if (event.target.classList.contains("delete")) {
       let _id = event.target.dataset.id;
@@ -245,7 +245,7 @@ function eventxListener() {
   });
 }
 function UI() {}
-UI.prototype.Green = function (text) {
+UI.prototype.Green = function(text) {
   feedback.classList.add("showItem");
   feedback.classList.add("color");
   feedback.textContent = `${text}`;
@@ -255,7 +255,7 @@ UI.prototype.Green = function (text) {
     feedback.classList.remove("color");
   }, 4000);
 };
-UI.prototype.Red = function (text) {
+UI.prototype.Red = function(text) {
   feedback.classList.add("showItem");
   feedback.textContent = `${text}`;
   check = false;
@@ -263,7 +263,7 @@ UI.prototype.Red = function (text) {
     feedback.classList.remove("showItem");
   }, 4000);
 };
-UI.prototype.addListOffetchData = function (AllQuestionofModule) {
+UI.prototype.addListOffetchData = function(AllQuestionofModule) {
   questionnum = -1;
   questionList.innerHTML = "";
   for (let i = 0; i < AllQuestionofModule.length; i++) {
@@ -287,22 +287,22 @@ UI.prototype.addListOffetchData = function (AllQuestionofModule) {
     this.displayNewOptions(question.options, ele[questionnum]);
   }
 };
-UI.prototype.showQuestion = function (e) {
+UI.prototype.showQuestion = function(e) {
   e.classList.add("show");
 };
-UI.prototype.hideQuestion = function (e) {
+UI.prototype.hideQuestion = function(e) {
   e.classList.remove("show");
 };
-UI.prototype.formFeild = function (inputs, value) {
+UI.prototype.formFeild = function(inputs, value) {
   for (let i = 0; i < inputs.elements.length - 1; i++) {
     inputs.elements[i].value = value;
   }
 };
-UI.prototype.deleteOption = function (num) {
+UI.prototype.deleteOption = function(num) {
   let list = document.querySelector(`.op-${num}`);
   list.parentNode.removeChild(list);
 };
-UI.prototype.addOption = function (element, num) {
+UI.prototype.addOption = function(element, num) {
   const div = document.createElement("div");
   div.classList.add(`op-${num}`);
   div.innerHTML = `<label for="option-1" class="question-label">option ${num} </label>
@@ -314,14 +314,14 @@ UI.prototype.addOption = function (element, num) {
               ></textarea>`;
   element.appendChild(div);
 };
-UI.prototype.addMultipleModule = function (data) {
+UI.prototype.addMultipleModule = function(data) {
   moduleContainerCard.innerHTML = "";
   for (let i = 0; i < data.length; i++) {
     const value = { CourseName: data[i].course, ModuleName: data[i].module };
     this.addModule(moduleContainerCard, value);
   }
 };
-UI.prototype.addModule = function (element, data) {
+UI.prototype.addModule = function(element, data) {
   const div = document.createElement("div");
   div.classList.add("moduleCard");
   div.innerHTML = `<h1>Module Name</h1> 
@@ -329,13 +329,13 @@ UI.prototype.addModule = function (element, data) {
         <h1>Course Name</h1>
         <h4 class="title editDatamodule">${data.CourseName}</h4>
         <div class="module-button">
-        <button class="module-Add-question">Add Question</button>
+        <button class="module-Add-question" target="form">Add Question</button>
         <button class="showAll">Show All</button>
         <button class="delete-module">Delete Module</button>
         </div>`;
   element.appendChild(div);
 };
-UI.prototype.displayNewOptions = function (options, element) {
+UI.prototype.displayNewOptions = function(options, element) {
   const keyArray = Object.values(options);
   const div = document.createElement("div");
   div.classList.add("display-option");
@@ -351,7 +351,7 @@ UI.prototype.displayNewOptions = function (options, element) {
   }
   element.appendChild(div);
 };
-UI.prototype.addQuestion = function (element, question) {
+UI.prototype.addQuestion = function(element, question) {
   const div = document.createElement("div");
   div.classList.add("card2");
   div.innerHTML = `<h2>Question</h2>
@@ -375,7 +375,7 @@ UI.prototype.addQuestion = function (element, question) {
         <h2>Speed</h2>
         <h5 class="editData">${question.speed}</h5>
         <div class="btn1">
-          <button class="edit" data-id=${question.id}>Edit</button>
+          <button class="edit" target="form" data-id=${question.id}>Edit</button>
           <button class="delete" data-id=${question.id}>Delete</button>
         </div>`;
   element.appendChild(div);
@@ -405,7 +405,7 @@ function Question(
   this.NumberOfBalls = NumberOfBalls;
   this.speed = speed;
 }
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", async function() {
   const ui = new UI();
   const data = await fetchAllData(
     "http://ec2-13-232-39-98.ap-south-1.compute.amazonaws.com:3000/admin/questions"
@@ -426,8 +426,8 @@ const sendData = async (url, data, method) => {
       method: method,
       body: JSON.stringify(data),
       headers: {
-        "Content-type": "application/json",
-      },
+        "Content-type": "application/json"
+      }
     });
     if (res.status !== 200 && res.status !== 201) {
       throw new Error("Failed to send Data");
@@ -446,8 +446,8 @@ const deleteData = async (url, _id) => {
       method: "DELETE",
       body: JSON.stringify({ _id }),
       headers: {
-        "Content-type": "application/json",
-      },
+        "Content-type": "application/json"
+      }
     });
     if (res.status !== 200 && res.status !== 201) {
       throw new Error("Failed to delete");
@@ -466,8 +466,8 @@ const deleteModule = async (url, data) => {
       method: "DELETE",
       body: JSON.stringify(data),
       headers: {
-        "Content-type": "application/json",
-      },
+        "Content-type": "application/json"
+      }
     });
     if (res.status !== 200 && res.status !== 201) {
       throw new Error("Failed to delete");
@@ -480,7 +480,7 @@ const deleteModule = async (url, data) => {
   }
 };
 
-const fetchAllData = async (url) => {
+const fetchAllData = async url => {
   try {
     let response = await fetch(url);
     response = await response.json();
